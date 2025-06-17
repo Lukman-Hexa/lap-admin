@@ -15,7 +15,7 @@ return new class extends Migration
             
             $table->id();
             $table->string('tokenable_type');
-            $table->unsignedBigInteger('tokenable_id');
+            $table->string('tokenable_id', 50);
             $table->string('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();
