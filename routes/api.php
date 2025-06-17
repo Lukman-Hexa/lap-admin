@@ -7,11 +7,32 @@ use App\Http\Controllers\Api\LapanganController; // Import API Controller
 use App\Http\Controllers\Api\FasilitasController; // Import API Controller
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\Api\TopupApiController;
-use App\Http\Controllers\TopupController;
+use App\Http\Controllers\Api\PembayaranController;
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::middleware('auth:sanctum')->group(function () {
+    // Rute untuk profil yang sudah ada
+    Route::get('/profile', [KonsumenApiController::class, 'profile']);
+
+    // ... (mungkin ada rute lain yang butuh login di sini)
+
+
+    // =================================================================
+    // == BAGIAN PEMBAYARAN ==
+    // =================================================================
+
+    // Dihapus atau di-comment karena sudah tidak dipakai
+    // Route::post('/pembayaran', [PembayaranController::class, 'createPayment']);
+    // Route::post('/pembayaran/{id_pembayaran}/konfirmasi', [PembayaranController::class, 'confirmPayment']);
+
+    // RUTE BARU YANG LEBIH SEDERHANA
+    // Endpoint ini akan menerima ID Pemesanan dan langsung memproses pembayaran.
+    Route::post('/pembayaran/{id_pemesanan}', [PembayaranController::class, 'processPayment']);
+
 });
 
 // Router konsumen Register & Login
@@ -46,4 +67,15 @@ Route::patch('/topup/{id}/confirm', [TopupApiController::class, 'confirm']);
 
 // --- RUTE BARU UNTUK MENGAMBIL PROFIL KONSUMEN ---
 // Middleware 'auth:sanctum' memastikan hanya pengguna dengan token valid yang bisa akses.
-Route::middleware('auth:sanctum')->get('/profile', [KonsumenApiController::class, 'profile']);
+// Route::middleware('auth:sanctum')->get('/profile', [KonsumenApiController::class, 'profile']);
+
+
+// // Pembayaran
+// // Rute untuk MEMBUAT catatan pembayaran (status akan jadi 'pending')
+// Route::post('/pembayaran', [PembayaranController::class, 'createPayment']);
+    
+//     // Rute untuk MENGKONFIRMASI pembayaran (potong saldo & ubah status)
+//     // {id_pembayaran} adalah ID yang didapat dari respons rute /pembayaran di atas.
+// Route::post('/pembayaran/{id_pembayaran}/konfirmasi', [PembayaranController::class, 'confirmPayment']);
+//     // =================================================================
+

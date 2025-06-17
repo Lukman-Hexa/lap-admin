@@ -8,6 +8,7 @@ use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\TopupController;
 use App\Http\Controllers\Api\TopupApiController;
+use App\Http\Controllers\PembayaranPageController;
 
 
 
@@ -23,7 +24,7 @@ Route::get('dashboard', [UserController::class, 'showHome'])->name('dashboard');
 Route::get('logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('informasi', [UserController::class, 'showInformasi'])->name('informasi');
-Route::get('pembayaran', [UserController::class, 'showPembayaran'])->name('pembayaran');
+// Route::get('pembayaran', [UserController::class, 'showPembayaran'])->name('pembayaran');
 Route::get('konsumen', [KonsumenController::class, 'index'])->name('konsumen');
 
 // Pastikan ini memanggil LapanganController::index yang mengembalikan view lapangan/index.blade.php
@@ -39,5 +40,8 @@ Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan
 Route::get('/topup', [TopupController::class, 'index'])->name('topup');
 // TAMBAHKAN INI DI routes/web.php
 Route::patch('/topup/{id}/confirm', [TopupApiController::class, 'confirm'])->middleware('auth');
+
+// Rute untuk menampilkan halaman pembayaran
+Route::get('/pembayaran', [PembayaranPageController::class, 'index'])->name('pembayaran');
 
 });
