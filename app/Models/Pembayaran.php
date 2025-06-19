@@ -67,7 +67,7 @@ class Pembayaran extends Model
                 
                 // == PERUBAHAN DI SINI ==
                 // Format diubah menjadi: PMB001, PMB002, dst.
-                $pembayaran->id_pembayaran = 'PMB' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+                $pembayaran->id_pembayaran = 'PBN' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
             }
         });
     }

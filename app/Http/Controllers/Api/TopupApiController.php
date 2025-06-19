@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topup;
-use App\Models\Konsumen;
+use App\Models\Konsumen; // Pastikan Konsumen diimport
 use Illuminate\Support\Facades\Validator;
-// 1. Import Facade DB dan Throwable untuk penanganan error.
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -15,29 +14,52 @@ class TopupApiController extends Controller
 {
     /**
      * Endpoint untuk nerima request top up dari Flutter.
-     * (Tidak ada perubahan di fungsi ini)
+     * Konsumen_id akan diambil dari token otentikasi.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
+        // Mendapatkan konsumen yang sedang terotentikasi dari token Sanctum
+        $konsumen = $request->user(); 
+
+        // Jika tidak ada konsumen yang terotentikasi (seharusnya tidak terjadi jika middleware sudah benar)
+        if (!$konsumen) {
+            return response()->json([
+                'message' => 'Unauthorized. User not found from token.',
+            ], 401); 
+        }
+
         $validator = Validator::make($request->all(), [
-            'no_identitas' => 'required|string|exists:konsumens,no_identitas',
-            'nominal'      => 'required|numeric|min:10000',
+            'nominal' => 'required|numeric|min:10000', // Hanya validasi nominal
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
         }
 
-        $topup = Topup::create([
-            'konsumen_id' => $request->no_identitas,
-            'nominal'     => $request->nominal,
-            'status'      => 'Pending',
-        ]);
+        try {
+            $topup = Topup::create([
+                'konsumen_id' => $konsumen->no_identitas, // Menggunakan no_identitas dari user yang terotentikasi
+                'nominal'     => $request->nominal,
+                'status'      => 'Pending',
+            ]);
 
-        return response()->json([
-            'message' => 'Request top up berhasil, menunggu konfirmasi admin.',
-            'data'    => $topup
-        ], 201);
+            return response()->json([
+                'message' => 'Request top up berhasil, menunggu konfirmasi admin.',
+                'data'    => $topup
+            ], 201);
+
+        } catch (Throwable $e) {
+            report($e);
+            return response()->json([
+                'message' => 'Gagal memproses request top up.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

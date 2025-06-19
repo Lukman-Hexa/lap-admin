@@ -141,7 +141,7 @@ table tbody tr:last-child td {
 }
 .data-table th:nth-child(5), /* Nominal */
 .data-table td:nth-child(5) {
-    width: 20%;
+    width: 15%;
 }
 .data-table th:nth-child(6), /* Nominal */
 .data-table td:nth-child(6) {

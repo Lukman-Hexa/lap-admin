@@ -61,7 +61,10 @@ Route::post('/pemesanan', [PemesananController::class, 'store']);
 
 // Top UP
 // Rute untuk Top Up dari Mobile App (Flutter)
-Route::post('/topup', [TopupApiController::class, 'store']);
+// Route::post('/topup', [TopupApiController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/topup', [TopupApiController::class, 'store']);
+});
 // Rute untuk konfirmasi Top Up dari Web Admin
 Route::patch('/topup/{id}/confirm', [TopupApiController::class, 'confirm']);
 
