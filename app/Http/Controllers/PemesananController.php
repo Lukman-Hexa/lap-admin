@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pemesanan;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str; // Tambahkan ini untuk menghasilkan UUID
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini
 
 class PemesananController extends Controller
 {
@@ -31,9 +32,20 @@ class PemesananController extends Controller
     // Fungsi untuk menyimpan data pemesanan dari API
     public function store(Request $request)
     {
+        // Pastikan pengguna sudah terautentikasi
+        if (!Auth::check()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized. User not logged in.',
+            ], 401); // 401 Unauthorized
+        }
+
+        // Ambil no_identitas dari pengguna yang sedang login
+        $konsumenId = Auth::user()->no_identitas; // Sesuaikan dengan nama kolom primary key di tabel Konsumen
+
         $validator = Validator::make($request->all(), [
-            // Validasi konsumen_id seharusnya merujuk ke no_identitas di tabel konsumens
-            'konsumen_id' => 'required|exists:konsumens,no_identitas', // Perbaikan di sini
+            // konsumen_id tidak lagi diperlukan dari request body karena akan diambil dari token
+            // 'konsumen_id' => 'required|exists:konsumens,no_identitas',
             'lapangan_id' => 'required|exists:lapangans,id_lapangan',
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i:s',
@@ -52,8 +64,7 @@ class PemesananController extends Controller
 
         try {
             $pemesanan = Pemesanan::create([
-                // 'id_pemesanan' => (string) Str::uuid(), // Menghasilkan UUID baru untuk id_pemesanan
-                'konsumen_id' => $request->konsumen_id,
+                'konsumen_id' => $konsumenId, // Gunakan konsumen_id dari user yang terautentikasi
                 'lapangan_id' => $request->lapangan_id,
                 'tanggal' => $request->tanggal,
                 'jam_mulai' => $request->jam_mulai,

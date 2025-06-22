@@ -54,10 +54,11 @@ Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']); // Me
 
 
 //Api Pemesanan
-// Rute untuk MENGAMBIL data pemesanan (GET request)
-Route::get('/pemesanan', [PemesananController::class, 'indexApi']); // Kita akan buat method indexApi
+// Rute untuk MENGAMBIL data pemesanan (GET request) - tidak perlu auth:sanctum jika ini untuk melihat semua pemesanan
+Route::get('/pemesanan', [PemesananController::class, 'indexApi']);
 // Rute untuk MENYIMPAN data pemesanan (POST request)
-Route::post('/pemesanan', [PemesananController::class, 'store']);
+// **PENTING: Tambahkan middleware 'auth:sanctum' di sini**
+Route::post('/pemesanan', [PemesananController::class, 'store'])->middleware('auth:sanctum');
 
 // Top UP
 // Rute untuk Top Up dari Mobile App (Flutter)

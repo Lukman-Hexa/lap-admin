@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topup;
-use App\Models\Konsumen; // Pastikan Konsumen diimport
+use App\Models\Konsumen;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -31,7 +31,7 @@ class TopupApiController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nominal' => 'required|numeric|min:10000', // Hanya validasi nominal
+            'nominal' => 'required|numeric|min:10000',
         ]);
 
         if ($validator->fails()) {

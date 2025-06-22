@@ -295,7 +295,7 @@ table tbody tr:last-child td {
 }
 .data-table th:nth-child(4), /* Harga Lapangan */
 .data-table td:nth-child(4) {
-    width: 10%;
+    width: 15%;
 }
 .data-table th:nth-child(5), /* Rating */
 .data-table td:nth-child(5) {
@@ -307,15 +307,15 @@ table tbody tr:last-child td {
 }
 .data-table th:nth-child(7), /* Gambar Lapangan */
 .data-table td:nth-child(7) {
-    width: 10%;
+    width: 15%;
 }
 .data-table th:nth-child(8), /* Fasilitas Lapangan */
 .data-table td:nth-child(8) {
-    width: 13%;
+    width: 15%;
 }
 .data-table th:nth-child(9), /* Status Aktif */
 .data-table td:nth-child(9) {
-    width: 5%;
+    width: 10%;
 }
 .data-table th:nth-child(10), /* Aksi */
 .data-table td:nth-child(10) {
